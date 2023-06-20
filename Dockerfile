@@ -1,19 +1,19 @@
-# Pick a low configuration python base image
-FROM python:alpine
+FROM python:3.8
 
-#  Expose the port 5000 of the docker container
-EXPOSE 5000
+# set working directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-# Create a folder app in container and work inside it
-WORKDIR /app
+# add requirements
+ADD ./requirements.txt /usr/src/app/requirements.txt
 
-COPY requirements.txt .
+RUN python -m pip install --upgrade pip
 
-# Install all the requirements
-RUN pip3 install -r requirements.txt
+# install requirements
+RUN pip install -r requirements.txt
 
-# Copy all the flask project files into the WORKDIR
-COPY . .
+# add app
+ADD . /usr/src/app
 
-# Execute flask application inside the container
-CMD python3 app/main.py
+# run server
+CMD python app.py runserver -h 0.0.0.0
