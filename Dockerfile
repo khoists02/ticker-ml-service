@@ -1,19 +1,17 @@
-FROM python:3.8
+# pull official base image
+FROM python:3.11.3-slim-buster
 
-# set working directory
-RUN mkdir -p /usr/src/app
+# set work directory
 WORKDIR /usr/src/app
 
-# add requirements
-ADD ./requirements.txt /usr/src/app/requirements.txt
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-RUN python -m pip install --upgrade pip
-
-# install requirements
+# install dependencies
+RUN pip install --upgrade pip
+COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
 
-# add app
-ADD . /usr/src/app
-
-# run server
-CMD python app.py runserver -h 0.0.0.0
+# copy project
+COPY . /usr/src/app/
