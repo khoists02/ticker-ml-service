@@ -6,7 +6,7 @@ from resources.training import TrainingResource
 class Auth(Resource):
    def get(self): return {}
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='web/data')
 api = Api(app)
 
 api.add_resource(Auth, '/api/auth')

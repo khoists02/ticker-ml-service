@@ -3,7 +3,7 @@ import pandas as pd
 
 class StockTraining:
     def __init__(self, path):
-        self.path = '../../data/test.csv'
+        self.path = path
         self.NUMERIC_COLUMNS = ['open', 'close', 'high', 'low']
         self.CATEGORICAL_COLUMNS = ['volume', 'date']
         self.feature_columns = []
@@ -13,17 +13,18 @@ class StockTraining:
         self.stock_data_test = []
 
     def get_data_training(self):
-        self.stock_data = pd.read_csv(self.path)
-        self.stock_data_test = self.stock_data[:10]
+        data = pd.read_csv(self.path)
+        # Train Data
+        self.stock_data = data
+        self.stock_data_test = data[:10]
+
         self.y_stock_train = self.stock_data.pop("higher")
         self.y_stock_test = self.stock_data_test.pop("higher")
-        ## Logs
-        print(self.stock_data, self.stock_data_test, self.y_stock_test, self.y_stock_train)
 
-    def get_features(self, stock_data):
+    def get_features(self):
 
         for feature_name in self.CATEGORICAL_COLUMNS:
-          vocabulary = stock_data[feature_name].unique()  # gets a list of all unique values from given feature column
+          vocabulary = self.stock_data[feature_name].unique()  # gets a list of all unique values from given feature column
           self.feature_columns.append(tf.feature_column.categorical_column_with_vocabulary_list(feature_name, vocabulary))
 
         for feature_name in self.NUMERIC_COLUMNS:
