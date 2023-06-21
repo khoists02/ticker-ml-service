@@ -45,13 +45,13 @@ class StockTraining:
     def get_eval_input_fn(self):
         return self.make_input_fn(self.stock_data_test, self.y_stock_test, num_epochs=1, shuffle=False)
 
-    def prediction(self):
+    def prediction(self) -> float:
         linear_est = tf.estimator.LinearClassifier(feature_columns=self.feature_columns)
         linear_est.train(self.get_train_input_fn())  # train
         result = linear_est.evaluate(self.get_eval_input_fn())  # get model metrics/stats by testing on tetsing data
         return result['accuracy']
     
-    def run(self):
+    def run(self) -> None:
         self.get_data_training()
         self.get_features()
         self.get_train_input_fn()
