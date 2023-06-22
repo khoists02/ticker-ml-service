@@ -2,14 +2,10 @@ from flask import Flask, jsonify
 from flask_restful import Api, Resource
 from resources.user import User
 from resources.training import TrainingResource
-# from rabbitmq_pika_flask import RabbitMQ
+from resources.rabbitmq import RabbitMQ
+from resources.received import Received
 
-
-# class Auth(Resource):
-#     def get(self): return {}
-
-
-app = Flask(__name__, static_folder='web/data')
+app = Flask(__name__)
 api = Api(app)
 # rabbit = RabbitMQ(app, 'report-stock')
 
@@ -17,7 +13,8 @@ api = Api(app)
 # api.add_resource(Auth, '/api/auth')
 api.add_resource(User, '/api/user')
 api.add_resource(TrainingResource, '/api/train')
-
+api.add_resource(RabbitMQ, '/api/send')
+api.add_resource(Received, '/api/received')
 
 # @app.route('ping', methods=['GET'])
 # def ping():

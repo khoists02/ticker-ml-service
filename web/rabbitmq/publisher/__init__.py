@@ -1,4 +1,5 @@
 import pika
+import json
 
 
 class PikaPublisher(object):
@@ -9,22 +10,22 @@ class PikaPublisher(object):
     def publish(self, message, routing_key):
         url = 'amqp://guest:guest@localhost:5672/%2f'
         params = pika.URLParameters(url)
-        print(params)
+        print(self.exchange_name)
         connection = pika.BlockingConnection(params)
 
         ch = connection.channel()
 
         ch.exchange_declare(exchange=self.exchange_name,
-                            type="fanout", durable=False, auto_delete=False)
+                            exchange_type="direct", durable=True, auto_delete=False)
+
+        print("Send message ," + message)
 
         ch.basic_publish(exchange=self.exchange_name,
                          routing_key=routing_key,
-                         body=message,
+                         body=json.dumps(message),
                          properties=pika.BasicProperties(
-                             content_type="text/plain",
                              delivery_mode=2,  # persistent
-                         ),
-                         block_on_flow_control=True)
+                         ))
         ch.close()
         connection.close()
 
@@ -38,17 +39,10 @@ class PikaPublisher(object):
         ch = connection.channel()
 
         print("start channel")
+        ch.queue_declare(queue=qname, durable=True,
+                         exclusive=False, auto_delete=False)
 
-        if not self.queue_exists:
-            ch.queue_declare(queue=qname, durable=False,
-                             exclusive=False, auto_delete=False)
-            ch.queue_bind(queue=qname, exchange=self.exchange_name)
-            print("Binding queue %s to exchange %s" %
-                  (qname, self.exchange_name))
-            # ch.queue_bind(queue=qname, exchange=self.exchange_name, routing_key=qname)
-            self.queue_exists = True
-
-        ch.basic_consume(callback, queue=qname)
-
-        pika.asyncore_loop()
-        print('Close reason:', connection.connection_close)
+        ch.basic_consume(
+            queue=qname, on_message_callback=callback, auto_ack=True)
+        print(' [*] Waiting for messages. To exit press CTRL+C')
+        ch.start_consuming()

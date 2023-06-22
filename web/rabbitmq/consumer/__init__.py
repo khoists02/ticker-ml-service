@@ -4,34 +4,14 @@ import os
 import time
 
 
-def pdf_process_function(msg):
-    print(" PDF processing")
-    print(" [x] Received " + str(msg))
-
-    time.sleep(5)  # delays for 5 seconds
-    print(" PDF processing finished")
-    return
-
-
-# Access the CLODUAMQP_URL environment variable and parse it (fallback to localhost)
-url = os.environ.get('CLOUDAMQP_URL', 'amqp://guest:guest@localhost:5672/%2f')
-params = pika.URLParameters(url)
-connection = pika.BlockingConnection(params)
-channel = connection.channel()  # start a channel
-channel.queue_declare(queue='report-stock')  # Declare a queue
-
-# create a function which is called on incoming messages
-
-
 def callback(ch, method, properties, body):
-    pdf_process_function(body)
+    print(" [x] Received %r" % body)
 
 
-# set up subscription on the queue
-channel.basic_consume('report-stock',
-                      callback,
-                      auto_ack=True)
+class PikaConsumer:
+    def __init__(self, publisher, qname) -> None:
+        self.publisher = publisher
+        self.qname = qname
 
-# start consuming (blocks)
-channel.start_consuming()
-connection.close()
+    def received(self):
+        self.publisher.monitor(qname=self.qname, callback=callback)
