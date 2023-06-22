@@ -18,3 +18,5 @@ tensorflow==2.12.*
 pandas==2.0.2
 pika==1.2.0
 rabbitmq-pika-flask==1.2.33
+psycopg2==2.9.6
+Flask-SQLAlchemy==3.0.3
