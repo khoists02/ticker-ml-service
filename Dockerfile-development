@@ -12,7 +12,7 @@ ENV PYTHONUNBUFFERED 1
 RUN pip install --upgrade pip
 
 RUN cd /usr/src/app
-COPY ./web/data/test.csv /usr/src/app/test.csv
+COPY /web/data/test.csv /usr/src/app/test.csv
 
 COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
