@@ -5,9 +5,8 @@ from resources.trainmodel import TrainingResource
 from resources.rabbitmq import RabbitMQ
 from resources.received import Received
 from config import AppConfig
-from sqlalchemy import text
 from database import db
-from model.tickers_stock import TickersStock
+from model.tickers_stock import TickersStock, TickersStockQuery
 
 appConfig = AppConfig()
 
@@ -24,18 +23,14 @@ api.add_resource(Received, '/api/received')
 
 @app.route('/')
 def home():
-    con = db.session.connection()
-    # query = text(
-    #     "select * from tickers_stock ")
-    # result = con.execute(query).first()
-    # print(result)
+    db.session.connection()
 
-    query = db.session.query(TickersStock).filter(
-        TickersStock.id == "73929f93-1deb-4543-afff-a63a26281771")
-    # result = con.execute(text(query)).first()
-    print(query)
+    qr = TickersStockQuery()
+    result = qr.findOneById(value="73929f93-1deb-4543-afff-a63a26281771")
+    print(result)
 
-    for i in query:
-        print(i.ticker_attributes_json)
+    json_str = qr.findTickersStockJsonById(
+        value="73929f93-1deb-4543-afff-a63a26281771")
+    print(json_str)
 
     return "Home Page !!!"
