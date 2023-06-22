@@ -12,6 +12,7 @@ from config import AppConfig
 config = AppConfig()
 db = SQLAlchemy()
 app = Flask(__name__)
+print("DATABASE URL", config.SQLALCHEMY_DATABASE_URI)
 app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
 api = Api(app)
 db.init_app(app)

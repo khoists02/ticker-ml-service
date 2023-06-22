@@ -2,6 +2,7 @@ from os import environ, path, curdir
 
 ROOT_DIR = path.abspath(curdir)
 
+
 class AppConfig(object):
     DATABASE_SQL_NAME = environ.get("DATABASE_SQL_NAME")
     DATABASE_HOST = environ.get("DATABASE_HOST")
@@ -17,4 +18,5 @@ class AppConfig(object):
         port=DATABASE_PORT,
         database_name=DATABASE_NAME
     )
-    ROOT_DIR= ROOT_DIR
+    ROOT_DIR = ROOT_DIR
+    APP_URL = environ.get("APP_URL")

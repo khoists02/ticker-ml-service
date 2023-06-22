@@ -12,7 +12,7 @@ class TrainingResource(Resource):
         print(request.base_url)
         base_url = request.base_url
         dir = ''
-        if 'https' in base_url:  # Run On Docker
+        if appConfig.APP_URL in base_url:  # Run On Docker
             dir = os.path.join(appConfig.ROOT_DIR, 'test.csv')
         else:
             dir = os.path.join(appConfig.ROOT_DIR, 'web', 'data', 'test.csv')
