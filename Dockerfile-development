@@ -10,8 +10,14 @@ ENV PYTHONUNBUFFERED 1
 
 # install dependencies
 RUN pip install --upgrade pip
-COPY ./requirements.txt /usr/src/app/requirements.txt
+
+RUN cd /usr/src/app
+RUN mkdir web
+RUN cd /usr/src/app/web
+RUN mkdir data
 COPY ./web/data/test.csv /usr/src/app/web/data/test.csv
+
+COPY ./requirements.txt /usr/src/app/requirements.txt
 RUN pip install -r requirements.txt
 
 # copy project
