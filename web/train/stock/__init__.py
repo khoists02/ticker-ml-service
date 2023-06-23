@@ -1,6 +1,5 @@
 import tensorflow as tf
 import pandas as pd
-import datetime as dt
 
 
 class StockTraining:
@@ -17,7 +16,7 @@ class StockTraining:
 
     def get_data_training(self):
         data = pd.read_json(self.json)
-        ## convert pandas date to str
+        # convert pandas date to str
         data['date'] = pd.to_datetime(data['date'].astype(str),
                                       errors='coerce',
                                       exact='True',
