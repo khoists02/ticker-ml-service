@@ -3,10 +3,10 @@ from flask_restful import Api
 from resources.user import User
 from resources.trainmodel import TrainingResource
 from resources.rabbitmq import RabbitMQ
-from resources.received import Received
 from config import AppConfig
 from database import db
 from werkzeug import exceptions
+from rabbitmq.consumer import worker
 
 # Configuration Application
 appConfig = AppConfig()
@@ -17,14 +17,23 @@ api = Api(app)
 app.config["SQLALCHEMY_DATABASE_URI"] = appConfig.SQLALCHEMY_DATABASE_URI
 db.init_app(app)
 
+
 # APIs
 api.add_resource(User, '/api/user')
 api.add_resource(TrainingResource, '/api/train/<string:id>')
+
 api.add_resource(RabbitMQ, '/api/send')
-api.add_resource(Received, '/api/received')
-
-
+# api.add_resource(RabbitMQReceived, '/api/received')
 # Error Defined
+
+
+@app.route("/")
+def home():
+    # run worker
+    worker()
+    return "Home !!!"
+
+
 @app.errorhandler(exceptions.BadRequest)
 def handle_bad_request_exception(e):
     return jsonify({

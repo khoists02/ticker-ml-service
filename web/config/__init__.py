@@ -20,3 +20,8 @@ class AppConfig(object):
     )
     ROOT_DIR = ROOT_DIR
     APP_URL = environ.get("APP_URL")
+    RABBITMQ_HOST = environ.get("RABBITMQ_HOST")
+    RABBITMQ_QUEUE = environ.get("RABBITMQ_QUEUE")
+    RABBITMQ_EXCHANGE = environ.get("RABBITMQ_EXCHANGE")
+    RABBITMQ_ROUTINGKEY = environ.get("RABBITMQ_ROUTINGKEY")
+    THREADS = environ.get("THREADS")
