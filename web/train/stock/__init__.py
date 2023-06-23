@@ -74,5 +74,5 @@ class StockTraining:
     def run(self) -> None:
         self.get_data_training()
         self.get_features()
-        # self.get_train_input_fn()
-        # self.get_eval_input_fn()
+        self.get_train_input_fn()
+        self.get_eval_input_fn()
