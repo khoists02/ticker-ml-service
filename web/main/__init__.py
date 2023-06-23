@@ -6,7 +6,7 @@ from resources.rabbitmq import RabbitMQ
 from resources.received import Received
 from config import AppConfig
 from database import db
-from error import Error
+from model.dto.error import Error
 from werkzeug import exceptions
 import json
 
