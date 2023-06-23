@@ -5,24 +5,30 @@ from database import db
 from model.tickers_stock import TickersStockQuery
 from config import AppConfig
 from model.dto.stock_train import StockTrain
+from flask import abort
+import errors
+from model.tickers_stock import TickersStock
 
 appConfig = AppConfig()
 
 
 class TrainingResource(Resource):
-    def get(self):
-        # connect
-        db.session.connection()
-
+    def post(self, id: str):
+        if (id is None):
+            abort(400, errors.not_found_err)
         # query instance of model
         qr = TickersStockQuery()
 
         # run query
-        json_str = qr.findTickersStockJsonById(
-            value="73929f93-1deb-4543-afff-a63a26281771")
+        item: TickersStock = qr.findOneById(value=id)
+
+        print(item)
+        if (item is None):
+            abort(400, errors.not_found_err)
 
         # convert to object
-        data = json.loads(json_str, object_hook=lambda d: StockTrain(**d))
+        data = json.loads(item.ticker_attributes_json,
+                          object_hook=lambda d: StockTrain(**d))
 
         max_len = len(data) - 1
 

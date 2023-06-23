@@ -1,4 +1,4 @@
-from flask import Flask, abort, jsonify
+from flask import Flask, jsonify
 from flask_restful import Api
 from resources.user import User
 from resources.trainmodel import TrainingResource
@@ -6,57 +6,41 @@ from resources.rabbitmq import RabbitMQ
 from resources.received import Received
 from config import AppConfig
 from database import db
-from model.dto.error import Error
 from werkzeug import exceptions
-import json
 
-not_found_err = Error(code=400, name='Error',
-                      description='Bad Request')
-
+# Configuration Application
 appConfig = AppConfig()
-
 app = Flask(__name__)
 api = Api(app)
+
+# Database Config
 app.config["SQLALCHEMY_DATABASE_URI"] = appConfig.SQLALCHEMY_DATABASE_URI
 db.init_app(app)
 
+# APIs
 api.add_resource(User, '/api/user')
-api.add_resource(TrainingResource, '/api/train')
+api.add_resource(TrainingResource, '/api/train/<string:id>')
 api.add_resource(RabbitMQ, '/api/send')
 api.add_resource(Received, '/api/received')
 
 
+# Error Defined
 @app.errorhandler(exceptions.BadRequest)
 def handle_bad_request_exception(e):
     return jsonify({
         "code": e.code,
         "name": e.name
-    })
+    }), 400
 
 
-# @app.errorhandler(HTTPException)
-# def handle_exception(e: Error):
-#     """Return JSON instead of HTML for HTTP errors."""
-#     # start with the correct headers and status code from the error
-#     response = e.get_response()
-#     # replace the body with JSON
-#     response.data = json.dumps({
-#         "code": e.code,
-#         "name": e.name,
-#         "description": e.description,
-#     }, default=lambda o: o.__dict__)
-#     response.content_type = "application/json"
-#     return response
+@app.errorhandler(exceptions.InternalServerError)
+def handle_internal_server_error_exception(e):
+    return jsonify({
+        "code": e.code,
+        "name": e.name
+    }), 500
 
 
+# Error Handling
 app.register_error_handler(400, handle_bad_request_exception)
-# app.register_error_handler(500, handle_exception)
-
-
-@app.route('/')
-def home():
-    if db is not None:
-        abort(400, not_found_err)
-    db.session.connection()
-
-    return {}
+app.register_error_handler(500, handle_internal_server_error_exception)

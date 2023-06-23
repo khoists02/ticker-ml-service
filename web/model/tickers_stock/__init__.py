@@ -15,9 +15,10 @@ class TickersStock(db.Model):
 
 class TickersStockQuery:
     def findOneById(self, value) -> TickersStock:
-        return db.session.query(TickersStock).filter(TickersStock.id == value)[0]
+        return db.session.query(TickersStock).filter(
+            TickersStock.id == value).first()
 
     def findTickersStockJsonById(self, value) -> str:
         result: TickersStock = db.session.query(
-            TickersStock).filter(TickersStock.id == value)[0]
+            TickersStock).filter(TickersStock.id == value).first()
         return result.ticker_attributes_json
