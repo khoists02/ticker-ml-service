@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+import array as arr
 from flask_restful import Api, Resource
 from resources.user import User
 from resources.trainmodel import TrainingResource
@@ -6,7 +7,9 @@ from resources.rabbitmq import RabbitMQ
 from resources.received import Received
 from config import AppConfig
 from database import db
-from model.tickers_stock import TickersStock, TickersStockQuery
+from model.tickers_stock import TickersStockQuery
+import json
+from model.dto.stock_train import StockTrain
 
 appConfig = AppConfig()
 
@@ -25,12 +28,4 @@ api.add_resource(Received, '/api/received')
 def home():
     db.session.connection()
 
-    qr = TickersStockQuery()
-    result = qr.findOneById(value="73929f93-1deb-4543-afff-a63a26281771")
-    print(result)
-
-    json_str = qr.findTickersStockJsonById(
-        value="73929f93-1deb-4543-afff-a63a26281771")
-    print(json_str)
-
-    return "Home Page !!!"
+    return {}
