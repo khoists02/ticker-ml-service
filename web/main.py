@@ -35,9 +35,9 @@ def start_rmq_connection():
 
 if __name__ == '__main__':
     try:
-        thread_1 = threading.Thread(target=start_rmq_connection)
-        thread_1.start()
-        thread_1.join(0)
+        # thread_1 = threading.Thread(target=start_rmq_connection)
+        # thread_1.start()
+        # thread_1.join(0)
         app.run(host='0.0.0.0', port=5000)
     except KeyboardInterrupt:
         print('Interrupted')

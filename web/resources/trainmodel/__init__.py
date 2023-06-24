@@ -20,7 +20,7 @@ class TrainingResource(Resource):
         qr = TickersStockQuery()
 
         # run query
-        item: TickersStock = qr.findOneById(value=id)
+        item: TickersStock = qr.findOneByIdAndType(value=id, type='DAILY')
 
         print(item)
         if (item is None):
@@ -31,6 +31,8 @@ class TrainingResource(Resource):
                           object_hook=lambda d: StockTrain(**d))
 
         max_len = len(data) - 1
+
+        print(len(data))
 
         for index, dt in enumerate(data):
             stock: StockTrain = dt
