@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from train.stock import StockTraining
+from train.linear_model import StockTraining
 import json
 from database import db
 from model.tickers_stock import TickersStockQuery

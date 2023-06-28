@@ -9,10 +9,10 @@ class StockTraining:
         self.NUMBERS_COLUMNS = ['volume']
         self.CATEGORICAL_COLUMNS = ['date']
         self.feature_columns = []
-        self.y_stock_train = []
-        self.y_stock_test = []
         self.stock_data = []
         self.stock_data_test = []
+        self.y_stock_train = []
+        self.y_stock_test = []
 
     def get_data_training(self):
         data = pd.read_json(self.json)
@@ -76,3 +76,6 @@ class StockTraining:
         self.get_features()
         self.get_train_input_fn()
         self.get_eval_input_fn()
+
+    # def sequence(self) -> None:
+    #     tf.keras.Sequential(tf.keras.layers.Dense(6))
